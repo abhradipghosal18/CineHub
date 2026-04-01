@@ -300,7 +300,6 @@ button, select, input { font-family:inherit; font-size:inherit; }
 .ctrl-select:focus { outline:none; border-color:var(--accent); }
 
 .ctrl-range {
-  -webkit-appearance: none;
   width       : 110px;
   height      : 4px;
   background  : var(--surface-2);
