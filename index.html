@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description"
+        content="CineHub — Real-time movie discovery powered by TMDB & OMDB APIs" />
+  <title>CineHub 🎬 — Discover Cinema</title>
+
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;600;700&family=JetBrains+Mono:wght@400;600&display=swap"
+        rel="stylesheet" />
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<header class="site-header" role="banner">
+  <a href="#" class="logo" aria-label="CineHub — go to home">
+    CINE<span>HUB</span>
+  </a>
+
+  <nav class="header-controls" aria-label="Global controls">
+    <button id="themeToggle"
+            class="btn-theme"
+            aria-label="Switch to light mode"
+            title="Toggle dark / light mode">
+      ☀️
+    </button>
+  </nav>
+</header>
+
+<section class="hero" aria-label="Search and discover movies">
+
+
+  <div id="heroPosters" class="hero-posters" aria-hidden="true"></div>
+
+
+  <div class="hero-center">
+
+    <h1 class="hero-title">
+      Discover
+      <em>Cinema</em>
+    </h1>
+
+    <p class="hero-subtitle">
+      Trending movies, live box-office data &amp; upcoming releases
+      all from real APIs, all in one place.
+    </p>
+
+
+    <div class="search-wrap" role="search">
+      <span class="search-icon" aria-hidden="true">🔍</span>
+      <input
+        id="searchInput"
+        class="search-bar"
+        type="search"
+        placeholder="Search movies, genres, directors…"
+        autocomplete="off"
+        spellcheck="false"
+        aria-label="Search movies"
+      />
+    </div>
+
+  </div>
+</section>
+
+<div class="controls" role="toolbar" aria-label="Filter and sort controls">
+
+
+  <div class="ctrl-group">
+    <label for="filterGenre">Genre</label>
+    <select id="filterGenre" class="ctrl-select" aria-label="Filter by genre">
+      <option value="">All Genres</option>
+    </select>
+  </div>
+
+
+  <div class="ctrl-group">
+    <label for="filterRating">Min Rating</label>
+    <input
+      id="filterRating"
+      class="ctrl-range"
+      type="range"
+      min="0" max="9" step="0.5" value="0"
+      aria-label="Minimum rating filter"
+      aria-valuemin="0" aria-valuemax="9" aria-valuenow="0"
+    />
+    <span id="ratingValue" class="rating-label">0+</span>
+  </div>
+
+
+  <div class="ctrl-group">
+    <label for="sortSelect">Sort by</label>
+    <select id="sortSelect" class="ctrl-select" aria-label="Sort movies">
+      <option value="popularity">Popularity</option>
+      <option value="rating">Top Rated</option>
+      <option value="date">Newest First</option>
+      <option value="title">A–Z Title</option>
+    </select>
+  </div>
+
+</div>
+
+<div class="tabs" role="tablist" aria-label="Movie categories">
+  <button
+    class="tab-btn tab-btn--active"
+    role="tab"
+    data-tab="trending"
+    aria-selected="true"
+  >🔥 Trending</button>
+
+  <button
+    class="tab-btn"
+    role="tab"
+    data-tab="nowplaying"
+    aria-selected="false"
+  >🎭 Now Playing</button>
+
+  <button
+    class="tab-btn"
+    role="tab"
+    data-tab="upcoming"
+    aria-selected="false"
+  >📅 Upcoming</button>
+</div>
+
+<main class="main-content" id="mainContent">
+
+
+  <section
+    id="searchSection"
+    class="section hidden"
+    role="tabpanel"
+    aria-live="polite"
+    aria-label="Search results"
+  >
+    <div class="section-header">
+      <h2 id="searchTitle" class="section-title">Search Results</h2>
+    </div>
+
+    <div id="searchResultsSection" class="movie-grid" role="list"></div>
+  </section>
+
+
+  <section
+    id="trendingSection"
+    class="section"
+    role="tabpanel"
+    aria-label="Trending movies this week"
+  >
+    <div class="section-header">
+      <h2 class="section-title">Trending</h2>
+      <span class="section-badge">🔥 This Week</span>
+    </div>
+
+    <div id="trendingGrid" class="movie-grid" role="list"></div>
+
+    <div class="load-more-wrap">
+      <button id="loadMoreTrending" class="btn-load-more">
+        Load More
+      </button>
+    </div>
+  </section>
+
+
+  <section
+    id="nowPlayingSection"
+    class="section hidden"
+    role="tabpanel"
+    aria-label="Movies now playing in theatres"
+  >
+    <div class="section-header">
+      <h2 class="section-title">Now Playing</h2>
+      <span class="section-badge" style="background:var(--green)">🎭 In Theatres</span>
+    </div>
+    <div id="nowPlayingGrid" class="movie-grid" role="list"></div>
+
+    <div class="load-more-wrap">
+      <button id="loadMoreNowPlaying" class="btn-load-more">
+        Load More
+      </button>
+    </div>
+  </section>
+
+
+  <section
+    id="upcomingSection"
+    class="section hidden"
+    role="tabpanel"
+    aria-label="Upcoming movie releases"
+  >
+    <div class="section-header">
+      <h2 class="section-title">Upcoming</h2>
+      <span class="section-badge" style="background:var(--accent-2)">📅 Coming Soon</span>
+    </div>
+    <div id="upcomingGrid" class="movie-grid" role="list"></div>
+
+    <div class="load-more-wrap">
+      <button id="loadMoreUpcoming" class="btn-load-more">
+        Load More
+      </button>
+    </div>
+  </section>
+
+</main>
+
+<div
+  id="movieModal"
+  class="modal-overlay"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Movie details"
+>
+  <div class="modal-container">
+    <button id="modalClose" class="modal-close" aria-label="Close">✕</button>
+
+    <div id="modalBody"></div>
+  </div>
+</div>
+
+<div id="loadingOverlay" class="loading-overlay" role="status" aria-label="Loading">
+  <div class="spinner"></div>
+</div>
+
+<div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+<footer class="site-footer">
+  <p>
+    © All Rights Reserved &nbsp;·&nbsp;
+    Built using
+    <a href="https://www.themoviedb.org/" target="_blank" rel="noopener">TMDB</a>
+    &amp;
+    <a href="https://www.omdbapi.com/"    target="_blank" rel="noopener">OMDB</a>
+    APIs &nbsp;·&nbsp; CineHub 2026
+  </p>
+</footer>
+
+<script type="module" src="script.js"></script>
+
+</body>
+</html>
